@@ -28,4 +28,4 @@ app.register_blueprint(task_bp, url_prefix="/tasks")
 app.register_blueprint(project_bp, url_prefix="/projects")
 
 if __name__ == "__main__":
-    app.run(host= "0.0.0.0" , port= 8000)
+    app.run(debug=True)
