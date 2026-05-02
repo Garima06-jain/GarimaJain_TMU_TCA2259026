@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 from config import Config
 
@@ -29,7 +29,11 @@ app.register_blueprint(project_bp, url_prefix="/projects")
 
 @app.route('/')
 def home():
-    return {'message': 'API is running'}, 200
+    return send_from_directory('frontend', 'index.html')
+
+@app.route('/<path:filename>')
+def frontend_static(filename):
+    return send_from_directory('frontend', filename)
 
 if __name__ == "__main__":
     app.run(debug=True)
