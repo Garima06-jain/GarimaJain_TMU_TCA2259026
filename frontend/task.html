@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskOrganizer — Tasks</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon"></div>
+      <div class="sidebar-brand-name">TaskOrganizer</div>
+    </div>
+
+    <div class="sidebar-section">Menu</div>
+    <ul>
+      <li onclick="goDashboard()">
+        <span class="nav-icon"></span> Dashboard
+      </li>
+      <li class="active">
+        <span class="nav-icon"></span> Tasks
+      </li>
+      <li onclick="goAnalytics()">
+        <span class="nav-icon"></span> Analytics
+      </li>
+    </ul>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="sidebar-search">
+      <input id="sidebarSearch" placeholder="Quick search tasks…" oninput="quickSearch(this.value)">
+    </div>
+
+    <div class="sidebar-footer">
+      <ul>
+        <li style="font-size:12px;color:var(--text3);padding:10px 14px;cursor:default;">
+          <span class="nav-icon"></span> <span id="loggedName">Loading…</span>
+        </li>
+        <li onclick="logout()">
+          <span class="nav-icon"></span> Sign Out
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="page-header">
+      <div class="breadcrumb">TaskOrganizer<span>/ Tasks</span></div>
+      <h1 id="pageTitle">Tasks</h1>
+      <p id="pageSubtitle">View and manage your tasks.</p>
+    </div>
+
+    <!-- ADMIN ONLY: New Project -->
+    <div class="section admin-only" style="display:none">
+      <div class="section-header">
+        <h2>New Project</h2>
+        <span class="section-badge">Admin</span>
+      </div>
+      <div class="form-grid">
+        <div class="field-wrap">
+          <label class="field-label">Project Name</label>
+          <input id="projectName" placeholder="e.g. Website Redesign">
+        </div>
+        <div class="field-wrap">
+          <label class="field-label">Description</label>
+          <input id="projectDesc" placeholder="Brief project overview">
+        </div>
+        <div class="btn-submit">
+          <button class="btn btn-submit" onclick="createProject()">Create Project</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN ONLY: New Task -->
+    <div class="section admin-only" style="display:none">
+      <div class="section-header">
+        <h2>New Task</h2>
+        <span class="section-badge">Admin</span>
+      </div>
+      <div class="form-grid four-col">
+        <div class="field-wrap">
+          <label class="field-label">Task Title</label>
+          <input id="title" placeholder="e.g. Design landing page">
+        </div>
+        <div class="field-wrap">
+          <label class="field-label">Assign To (User ID)</label>
+          <input id="assignedTo" placeholder="e.g. john_doe or EMP001">
+        </div>
+        <div class="field-wrap">
+          <label class="field-label">Priority</label>
+          <select id="priority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Medium</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+        <div class="field-wrap">
+          <label class="field-label">Due Date</label>
+          <input id="dueDate" type="date">
+        </div>
+        <div class="field-wrap" style="grid-column:1/-1">
+          <label class="field-label">Notes (optional)</label>
+          <input id="taskNotes" placeholder="Any additional context or links…">
+        </div>
+        <div class="btn-submit">
+          <button class="btn btn-submit" onclick="createTask()">Create Task</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADMIN ONLY: Bulk Actions -->
+    <div class="section admin-only" style="display:none">
+      <div class="section-header">
+        <h2>Bulk Actions</h2>
+        <span class="section-badge">Admin</span>
+      </div>
+      <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+        <button class="btn btn-ghost" onclick="bulkComplete()">Mark All Pending → Complete</button>
+        <button class="btn btn-ghost" onclick="refreshTasks()">Refresh Task List</button>
+        <span style="font-size:12px;color:var(--text3);margin-left:auto;" id="lastRefreshed"></span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <h2 id="taskListTitle">All Tasks</h2>
+        <div style="display:flex;gap:8px;">
+          <select id="sortSelect" onchange="applySortFilter()" class="sort-select">
+            <option value="newest">Newest first</option>
+            <option value="due">Due date</option>
+            <option value="priority">Priority</option>
+            <option value="az">A → Z</option>
+          </select>
+        </div>
+      </div>
+      <div id="tasks" class="task-grid">
+        <div class="empty-state">
+          <div class="empty-icon">📭</div>
+          <p>Loading tasks…</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

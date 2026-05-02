@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskOrganizer — Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<div class="auth-wrapper">
+  <div class="auth-card">
+
+    <div class="auth-logo">
+      <div class="auth-logo-icon">◈</div>
+      <div class="auth-logo-text">TaskOrganizer</div>
+    </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchTab('signup')">Create Account</button>
+    </div>
+
+    <!-- ── SIGN IN ── -->
+    <div id="loginForm" class="auth-form active">
+      <h2>Good to see you again</h2>
+      <p>Sign in with your User ID and password.</p>
+
+      <div class="input-group">
+        <label>User ID</label>
+        <input id="loginUserId" type="text" placeholder="e.g. john_doe or EMP001" autocomplete="username">
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <div class="input-with-toggle">
+          <input id="loginPassword" type="password" placeholder="••••••••" autocomplete="current-password">
+          <button class="toggle-pw" type="button" onclick="togglePw('loginPassword', this)" tabindex="-1">👁</button>
+        </div>
+      </div>
+
+      <div class="remember-row">
+        <label class="checkbox-label">
+          <input type="checkbox" id="rememberMe"> Remember me for 7 days
+        </label>
+        <span class="forgot-link" onclick="showForgotHint()">Forgot password?</span>
+      </div>
+
+      <button class="btn-primary" onclick="login()">Sign In →</button>
+    </div>
+
+    <!-- ── SIGN UP ── -->
+    <div id="signupForm" class="auth-form">
+      <h2>Let's get you started</h2>
+      <p>A few quick details and you're in.</p>
+
+      <div class="input-group">
+        <label>User ID <span style="font-size:11px;color:var(--text3);">(this is what you'll use to log in)</span></label>
+        <input id="signupUserId" type="text" placeholder="e.g. john_doe or EMP001" autocomplete="username">
+      </div>
+      <div class="input-group">
+        <label>Full Name</label>
+        <input id="name" placeholder="Your name" autocomplete="name">
+      </div>
+      <div class="input-group">
+        <label>Work Email</label>
+        <input id="email" type="email" placeholder="you@company.com" autocomplete="email">
+      </div>
+      <div class="input-group">
+        <label>Password</label>
+        <div class="input-with-toggle">
+          <input id="password" type="password" placeholder="Min. 8 characters" autocomplete="new-password" oninput="checkStrength(this.value)">
+          <button class="toggle-pw" type="button" onclick="togglePw('password', this)" tabindex="-1">👁</button>
+        </div>
+        <div class="strength-bar" id="strengthBar">
+          <div class="strength-fill" id="strengthFill"></div>
+        </div>
+        <div class="strength-label" id="strengthLabel"></div>
+      </div>
+      <div class="input-group">
+        <label>Role</label>
+        <select id="role">
+          <option value="member">Team Member</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <button class="btn-primary" onclick="signup()">Create Account →</button>
+    </div>
+
+  </div>
+</div>
+
+<script src="./script.js"></script>
+<script>
+function switchTab(tab) {
+  document.querySelectorAll('.auth-tab').forEach((t, i) => {
+    t.classList.toggle('active', (tab === 'login' && i === 0) || (tab === 'signup' && i === 1));
+  });
+  document.getElementById('loginForm').classList.toggle('active', tab === 'login');
+  document.getElementById('signupForm').classList.toggle('active', tab === 'signup');
+}
+
+function togglePw(id, btn) {
+  const input = document.getElementById(id);
+  if (input.type === 'password') { input.type = 'text'; btn.textContent = '🙈'; }
+  else { input.type = 'password'; btn.textContent = '👁'; }
+}
+
+function checkStrength(val) {
+  const fill  = document.getElementById('strengthFill');
+  const label = document.getElementById('strengthLabel');
+  if (!val) { fill.style.width = '0'; label.textContent = ''; return; }
+  let score = 0;
+  if (val.length >= 8) score++;
+  if (/[A-Z]/.test(val)) score++;
+  if (/[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  const levels = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+  const colors = ['', '#ef4444', '#f59e0b', '#3b82f6', '#10b981'];
+  fill.style.width  = (score * 25) + '%';
+  fill.style.background = colors[score];
+  label.textContent = levels[score];
+  label.style.color = colors[score];
+}
+
+function showForgotHint() {
+  toast('Password reset — contact your workspace admin.', 'info');
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TaskOrganizer — Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="toast-container"></div>
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="sidebar-brand-icon"></div>
+      <div class="sidebar-brand-name">TaskOrganizer</div>
+    </div>
+
+    <div class="sidebar-section">Menu</div>
+    <ul>
+      <li class="active">
+        <span class="nav-icon"></span> Dashboard
+      </li>
+      <li onclick="goTasks()">
+        <span class="nav-icon"></span> Tasks
+      </li>
+      <li onclick="goAnalytics()">
+        <span class="nav-icon"></span> Analytics
+      </li>
+    </ul>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="sidebar-search">
+      <input id="sidebarSearch" placeholder="Quick search tasks…" oninput="quickSearch(this.value)">
+    </div>
+
+    <div class="sidebar-footer">
+      <ul>
+        <li id="userLabel" style="font-size:12px;color:var(--text3);padding:10px 14px;cursor:default;">
+          <span class="nav-icon"></span> <span id="loggedName">Loading…</span>
+        </li>
+        <li onclick="logout()">
+          <span class="nav-icon"></span> Sign Out
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <div class="page-header">
+      <div class="breadcrumb">TaskOrganizer<span>/ Dashboard</span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+        <div>
+          <h1 id="greetingHeading">Overview</h1>
+          <p>Here's what's happening with your tasks today.</p>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-ghost" onclick="exportTasks()">Export CSV</button>
+          <button class="btn btn-accent" onclick="goTasks()">New Task</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-icon"></div>
+        <h3>Total Tasks</h3>
+        <p id="total"><span class="spinner"></span></p>
+        <div class="card-change">All assigned tasks</div>
+      </div>
+      <div class="card">
+        <div class="card-icon"></div>
+        <h3>Completed</h3>
+        <p id="completed"><span class="spinner"></span></p>
+        <div class="card-change" id="completionRate">Successfully finished</div>
+      </div>
+      <div class="card">
+        <div class="card-icon"></div>
+        <h3>Overdue</h3>
+        <p id="overdue"><span class="spinner"></span></p>
+        <div class="card-change">Past due date</div>
+      </div>
+      <div class="card">
+        <div class="card-icon"></div>
+        <h3>Due Today</h3>
+        <p id="dueToday"><span class="spinner"></span></p>
+        <div class="card-change">Needs attention</div>
+      </div>
+    </div>
+
+    <div class="section" style="padding:20px 28px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+        <span style="font-size:13px;font-weight:600;color:var(--text2);">Overall Completion</span>
+        <span id="progressPct" style="font-size:13px;font-weight:700;color:var(--accent);">0%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterTasks('all', this)">All</button>
+      <button class="filter-btn" onclick="filterTasks('pending', this)">Pending</button>
+      <button class="filter-btn" onclick="filterTasks('completed', this)">Completed</button>
+      <button class="filter-btn" onclick="filterTasks('overdue', this)">Overdue</button>
+    </div>
+
+    <div class="section">
+      <div class="section-header">
+        <h2>Active Tasks</h2>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select id="sortSelect" onchange="applySortFilter()" class="sort-select">
+            <option value="newest">Newest first</option>
+            <option value="oldest">Oldest first</option>
+            <option value="due">Due date</option>
+            <option value="az">A → Z</option>
+          </select>
+        </div>
+      </div>
+      <div id="tasks" class="task-grid">
+        <div class="empty-state">
+          <div class="empty-icon"></div>
+          <p>Loading tasks…</p>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<div id="analyticsModal" class="modal-overlay" style="display:none" onclick="if(event.target===this)closeAnalytics()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3>📈 Analytics Overview</h3>
+      <button onclick="closeAnalytics()" class="modal-close">✕</button>
+    </div>
+    <div id="analyticsContent" class="analytics-grid"></div>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
