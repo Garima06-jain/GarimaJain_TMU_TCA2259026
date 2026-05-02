@@ -27,5 +27,9 @@ app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(task_bp, url_prefix="/tasks")
 app.register_blueprint(project_bp, url_prefix="/projects")
 
+@app.route('/')
+def home():
+    return {'message': 'API is running'}, 200
+
 if __name__ == "__main__":
     app.run(host= "0.0.0.0" , port= 8000)
